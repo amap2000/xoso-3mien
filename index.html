@@ -2,18 +2,45 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Kết quả Xổ số 3 miền</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kết quả Xổ số 3 miền hôm nay</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 30px; }
+    h1 { color: #d32f2f; }
+    .mien { border: 1px solid #ccc; padding: 15px; border-radius: 10px; margin: 15px auto; width: 80%; background: #f9f9f9; }
+    .mien h2 { color: #1565c0; }
+    pre { text-align: left; background: #fff; padding: 10px; border-radius: 8px; overflow-x: auto; }
+  </style>
 </head>
 <body>
-  <h1>Kết quả Xổ số 3 miền hôm nay</h1>
-  <pre id="ketqua">Đang tải dữ liệu...</pre>
+  <h1>Kết quả Xổ số 3 miền</h1>
+  <p><i>Dữ liệu được cập nhật tự động mỗi ngày lúc 18h30</i></p>
+  <div id="noidung">Đang tải dữ liệu...</div>
 
   <script>
     async function loadData() {
-      const res = await fetch('data.json?' + Date.now());
-      const data = await res.json();
-      document.getElementById('ketqua').textContent = JSON.stringify(data, null, 2);
+      try {
+        const res = await fetch('data.json?' + Date.now());
+        const data = await res.json();
+
+        let html = `<p><b>Ngày cập nhật:</b> ${data.ngay_cap_nhat}</p>`;
+
+        for (const [key, val] of Object.entries(data)) {
+          if (key.startsWith("XS")) {
+            html += `
+              <div class="mien">
+                <h2>${val.mien}</h2>
+                <pre>${JSON.stringify(val.ket_qua, null, 2)}</pre>
+              </div>`;
+          }
+        }
+
+        document.getElementById("noidung").innerHTML = html;
+      } catch (e) {
+        document.getElementById("noidung").innerHTML = "<p>Lỗi tải dữ liệu.</p>";
+      }
     }
+
     loadData();
   </script>
 </body>
