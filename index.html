@@ -20,24 +20,39 @@
   <script>
     async function loadData() {
       try {
-        const res = await fetch('data.json?' + Date.now());
+        const res = await fetch('data.json?' + new Date().getTime()); // chống cache
+        if (!res.ok) throw new Error("Không tải được dữ liệu");
         const data = await res.json();
 
         let html = `<p><b>Ngày cập nhật:</b> ${data.ngay_cap_nhat}</p>`;
 
-        for (const [key, val] of Object.entries(data)) {
-          if (key.startsWith("XS")) {
-            html += `
-              <div class="mien">
-                <h2>${val.mien}</h2>
-                <pre>${JSON.stringify(val.ket_qua, null, 2)}</pre>
-              </div>`;
-          }
+        if (data.XSMN) {
+          html += `
+            <div class="mien">
+              <h2>${data.XSMN.mien}</h2>
+              <pre>${JSON.stringify(data.XSMN.ket_qua, null, 2)}</pre>
+            </div>`;
+        }
+
+        if (data.XSMT) {
+          html += `
+            <div class="mien">
+              <h2>${data.XSMT.mien}</h2>
+              <pre>${JSON.stringify(data.XSMT.ket_qua, null, 2)}</pre>
+            </div>`;
+        }
+
+        if (data.XSMB) {
+          html += `
+            <div class="mien">
+              <h2>${data.XSMB.mien}</h2>
+              <pre>${JSON.stringify(data.XSMB.ket_qua, null, 2)}</pre>
+            </div>`;
         }
 
         document.getElementById("noidung").innerHTML = html;
-      } catch (e) {
-        document.getElementById("noidung").innerHTML = "<p>Lỗi tải dữ liệu.</p>";
+      } catch (err) {
+        document.getElementById("noidung").innerHTML = "<p>Lỗi tải dữ liệu: " + err.message + "</p>";
       }
     }
 
