@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kết quả Xổ số 3 miền</title>
+  <meta charset="UTF-8">
+  <title>Kết quả Xổ số 3 miền</title>
 </head>
 <body>
-    <h1 style="text-align:center;">Kết quả Xổ số 3 miền</h1>
-    <p style="text-align:center;">Website mẫu đang hoạt động...</p>
+  <h1>Kết quả Xổ số 3 miền hôm nay</h1>
+  <pre id="ketqua">Đang tải dữ liệu...</pre>
+
+  <script>
+    async function loadData() {
+      const res = await fetch('data.json?' + Date.now());
+      const data = await res.json();
+      document.getElementById('ketqua').textContent = JSON.stringify(data, null, 2);
+    }
+    loadData();
+  </script>
 </body>
 </html>
